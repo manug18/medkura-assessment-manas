@@ -5,6 +5,9 @@ node_modules/
 dist/
 build/
 
+# Vite dev dependency bundles (generated)
+.vite/
+
 # env files
 .env
 
@@ -19,3 +22,6 @@ yarn-error.log*
 # IDE
 .vscode/
 .idea/
+
+# task4-ai frontend build artifacts (generated)
+task4-ai/frontend/dist/

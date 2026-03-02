@@ -1,0 +1,16 @@
+{
+  "name": "medkura-ai-summarizer",
+  "version": "1.0.0",
+  "description": "Medical Report Summarizer with Claude AI",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\"",
+    "backend:dev": "cd backend && npm run dev",
+    "frontend:dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "preview": "cd frontend && npm run preview"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

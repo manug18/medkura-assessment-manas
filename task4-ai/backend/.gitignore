@@ -1,0 +1,12 @@
+node_modules/
+.env
+.env.local
+.DS_Store
+*.log
+
+# Ensure production and local envs are ignored
+.env.production
+.env.development
+
+# Ignore any generated build/deps from frontend tooling
+../frontend/.vite/
