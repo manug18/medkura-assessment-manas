@@ -1,5 +1,6 @@
 import { doctorService } from "../services/doctor.service.js";
 import { bookingSchema } from "../validators/booking.validator.js";
+import { ZodError } from "zod";
 
 export const getDoctors = (req, res) => {
   try {
@@ -29,9 +30,22 @@ export const createBooking = (req, res) => {
   }
 };
 
-// small helper (looks professional)
+// Enhanced error handler with Zod validation support
 function handleError(res, err) {
-  res.status(err.statusCode || 400).json({
-    message: err.message || "Something went wrong",
+  // Handle Zod validation errors
+  if (err.name === 'ZodError' || err.constructor.name === 'ZodError') {
+    return res.status(400).json({
+      message: "Validation failed",
+      errors: err.issues.map(e => ({
+        field: e.path.join('.'),
+        message: e.message,
+      })),
+    });
+  }
+  
+  // Handle custom errors with statusCode
+  const statusCode = err.statusCode || 500;
+  res.status(statusCode).json({
+    message: err.message || "Internal server error",
   });
 }
