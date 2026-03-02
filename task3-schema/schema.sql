@@ -71,7 +71,7 @@ CREATE TABLE cases (
     case_id SERIAL PRIMARY KEY,
     patient_id INT NOT NULL REFERENCES patients(patient_id) ON DELETE CASCADE,
     assigned_rep INT REFERENCES representatives(rep_id) ON DELETE SET NULL,
-    current_stage case_stage NOT NULL DEFAULT 'lead_received',
+    current_stage case_stage NOT NULL DEFAULT 'onboarded',
     current_stage_started_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     case_description TEXT NOT NULL,
     treatment_type VARCHAR(100), -- e.g., "Knee Replacement", "Cardiac Surgery"
