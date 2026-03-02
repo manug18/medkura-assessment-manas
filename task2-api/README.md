@@ -2,7 +2,37 @@
 
 A Node.js + Express REST API for managing doctor availability and patient appointments. This API provides endpoints for retrieving doctor profiles, checking availability slots, and creating bookings with validation.
 
-## 📋 Project Overview
+## � Quick Start
+
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Start the server
+npm run dev
+
+# 3. Test the endpoints
+# Get all doctors
+curl http://localhost:3001/doctors
+
+# Get doctors by specialty
+curl http://localhost:3001/doctors?specialty=cardiology
+
+# Get available slots for a doctor
+curl http://localhost:3001/doctors/doc_001/slots
+
+# Create a booking
+curl -X POST http://localhost:3001/bookings \
+  -H "Content-Type: application/json" \
+  -d '{
+    "doctorId": "doc_001",
+    "slotDatetime": "2026-03-05T10:00:00.000Z",
+    "patientName": "Ravi Sharma",
+    "patientPhone": "+919876543210"
+  }'
+```
+
+## �📋 Project Overview
 
 This backend service powers a medical appointment booking system with:
 - Doctor management and filtering by specialty and location
@@ -207,7 +237,7 @@ curl -X POST http://localhost:3001/bookings \
   }'
 ```
 
-**Success Response** (200):
+**Success Response** (201):
 ```json
 {
   "message": "Booking confirmed",
@@ -216,6 +246,19 @@ curl -X POST http://localhost:3001/bookings \
 ```
 
 **Error Responses**:
+
+Validation Error (400):
+```json
+{
+  "message": "Validation failed",
+  "errors": [
+    {
+      "field": "patientPhone",
+      "message": "Invalid phone number format"
+    }
+  ]
+}
+```
 
 Doctor Not Found (404):
 ```json
@@ -236,6 +279,56 @@ Slot Already Booked (409):
 {
   "message": "Slot already booked"
 }
+```
+
+---
+
+## 🧪 Testing Examples
+
+### Test Invalid Booking (Validation Error)
+```bash
+curl -X POST http://localhost:3001/bookings \
+  -H "Content-Type: application/json" \
+  -d '{
+    "doctorId": "doc_001",
+    "slotDatetime": "invalid-date",
+    "patientName": "R",
+    "patientPhone": "123"
+  }'
+
+# Expected: 400 Bad Request with validation errors
+```
+
+### Test Double Booking (Conflict)
+```bash
+# Book a slot
+curl -X POST http://localhost:3001/bookings \
+  -H "Content-Type: application/json" \
+  -d '{
+    "doctorId": "doc_001",
+    "slotDatetime": "2026-03-05T10:00:00.000Z",
+    "patientName": "Ravi Sharma",
+    "patientPhone": "+919876543210"
+  }'
+
+# Try to book the same slot again
+curl -X POST http://localhost:3001/bookings \
+  -H "Content-Type: application/json" \
+  -d '{
+    "doctorId": "doc_001",
+    "slotDatetime": "2026-03-05T10:00:00.000Z",
+    "patientName": "Another Patient",
+    "patientPhone": "+919876543211"
+  }'
+
+# Expected: 409 Conflict - Slot already booked
+```
+
+### Test Non-Existent Doctor
+```bash
+curl http://localhost:3001/doctors/doc_999/slots
+
+# Expected: 404 Not Found
 ```
 
 ---
