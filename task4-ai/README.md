@@ -17,17 +17,25 @@ A full-stack medical report summarizer powered by Claude AI. Care representative
 task4-ai/
 ├── backend/                 # Node.js + Express API
 │   ├── src/
-│   │   ├── index.js        # Express server setup
-│   │   ├── services/
+│   │   ├── index.js        # Express server and middleware
+│   │   ├── controllers/    # request handlers
+│   │   │   └── summary.controller.js
+│   │   ├── services/       # business logic / external API calls
 │   │   │   └── claude.service.js   # Claude API integration
-│   │   └── routes/
-│   │       └── summarize.routes.js # POST /api/summarise endpoint
+│   │   ├── data/           # static/sample data for demos/tests
+│   │   │   └── sample_reports.js
+│   │   └── routes/         # express routers
+│   │       └── summarize.routes.js # POST /api/summarise + GET /api/sample
 │   ├── .env.example        # Environment variables template
 │   └── package.json
 ├── frontend/               # React + TypeScript + Vite
 │   ├── src/
-│   │   ├── components/
-│   │   │   └── MedicalReportSummarizer.tsx
+│   │   ├── components/    # UI building blocks
+│   │   │   ├── MedicalReportSummarizer.tsx
+│   │   │   ├── ReportForm.tsx
+│   │   │   └── SummaryDisplay.tsx
+│   │   ├── services/      # frontend API helpers
+│   │   │   └── api.ts
 │   │   ├── App.tsx
 │   │   └── main.tsx
 │   └── package.json
@@ -77,7 +85,7 @@ The frontend is configured to proxy API calls to the backend automatically.
 ## Usage
 
 1. Visit `http://localhost:5173` in your browser
-2. Paste a medical report or upload a text file
+2. Paste a medical report or click "Load sample report" to populate an example
 3. Click "Summarize Report"
 4. View the AI-generated summary with:
    - 📊 **Key Findings** - Main diagnosis and clinical summary
@@ -87,6 +95,12 @@ The frontend is configured to proxy API calls to the backend automatically.
    - 👨‍⚕️ **Suggested Specialist** - Recommended specialist type
 
 ## API Endpoint
+
+### POST `/api/summarise`
+
+### GET `/api/sample`
+
+Returns a plain-text example medical report, useful for frontend demos or manual testing.
 
 ### POST `/api/summarise`
 
